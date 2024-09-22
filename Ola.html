@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalendarz Randkowy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(6, 100px);
+            grid-gap: 10px;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #ffcccb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .box.active {
+            background-color: #90ee90;
+        }
+        .modal, .modal-activated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+        }
+        .modal-content, .modal-activated-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+        .modal.show, .modal-activated.show {
+            visibility: visible;
+        }
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .activate-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 24 kwadraty -->
+    <div class="box" data-id="1">1</div>
+    <div class="box" data-id="2">2</div>
+    <div class="box" data-id="3">3</div>
+    <div class="box" data-id="4">4</div>
+    <div class="box" data-id="5">5</div>
+    <div class="box" data-id="6">6</div>
+    <div class="box" data-id="7">7</div>
+    <div class="box" data-id="8">8</div>
+    <div class="box" data-id="9">9</div>
+    <div class="box" data-id="10">10</div>
+    <div class="box" data-id="11">11</div>
+    <div class="box" data-id="12">12</div>
+    <div class="box" data-id="13">13</div>
+    <div class="box" data-id="14">14</div>
+    <div class="box" data-id="15">15</div>
+    <div class="box" data-id="16">16</div>
+    <div class="box" data-id="17">17</div>
+    <div class="box" data-id="18">18</div>
+    <div class="box" data-id="19">19</div>
+    <div class="box" data-id="20">20</div>
+    <div class="box" data-id="21">21</div>
+    <div class="box" data-id="22">22</div>
+    <div class="box" data-id="23">23</div>
+    <div class="box" data-id="24">24</div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <p id="modal-text">Opis randki...</p>
+        <button class="activate-btn" id="activate-btn">Aktywuj randkę</button>
+        <button class="close-btn" id="close-btn">Zamknij</button>
+    </div>
+</div>
+
+<div class="modal-activated" id="modal-activated">
+    <div class="modal-activated-content">
+        <p id="activated-text">Plan na randkę...</p>
+        <button class="close-btn" id="close-activated-btn">Zamknij</button>
+    </div>
+</div>
+
+<script>
+    const boxes = document.querySelectorAll('.box');
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    const modalActivated = document.getElementById('modal-activated');
+    const activatedText = document.getElementById('activated-text');
+    const activateBtn = document.getElementById('activate-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const closeActivatedBtn = document.getElementById('close-activated-btn');
+
+    // Lista opisów randek
+    const randki = [
+        "Romantyczna kolacja przy świecach",
+        "Wypad na łyżwy",
+        "Wieczór filmowy z ulubionym filmem",
+        "Wyjście na kręgle",
+        "Spacer po plaży",
+        "Wspólne gotowanie nowej potrawy",
+        "Wieczór gier planszowych",
+        "Wycieczka do muzeum",
+        "Seans w planetarium",
+        "Wycieczka rowerowa",
+        "Wieczór karaoke",
+        "Wypad na sushi",
+        "Zwiedzanie zamku",
+        "Kolacja w restauracji z widokiem",
+        "Wyjście na koncert",
+        "Spacer po parku i piknik",
+        "Degustacja win",
+        "Wspólne malowanie obrazów",
+        "Wyjście do teatru",
+        "Seans w kinie plenerowym",
+        "Wieczór przy kominku",
+        "Wizyta w wesołym miasteczku",
+        "Gra w minigolfa",
+        "Wypad na narty"
+    ];
+
+    // Funkcja pokazująca modal z opisem randki
+    function showModal(index) {
+        modalText.textContent = randki[index - 1];
+        modal.classList.add('show');
+        activateBtn.onclick = () => activateDate(index);
+    }
+
+    // Funkcja aktywująca randkę i pokazująca plan
+    function activateDate(index) {
+        localStorage.setItem(`activated-${index}`, true);
+        modalActivated.classList.add('show');
+        activatedText.textContent = `Zadanie na dziś: ${randki[index - 1]}`;
+        document.querySelector(`.box[data-id="${index}"]`).classList.add('active');
+        modal.classList.remove('show');
+    }
+
+    // Funkcja zamykająca modale
+    function closeModal() {
+        modal.classList.remove('show');
+    }
+
+    function closeActivatedModal() {
+        modalActivated.classList.remove('show');
+    }
+
+    // Obsługa kliknięcia na kwadrat
+    boxes.forEach(box => {
+        box.addEventListener('click', () => {
+            const id = box.getAttribute('data-id');
+            showModal(id);
+        });
+
+        // Odczytaj, które randki zostały aktywowane
+        const id = box.getAttribute('data-id');
+        if (localStorage.getItem(`activated-${id}`)) {
+            box.classList.add('active');
+        }
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    closeActivatedBtn.addEventListener('click', closeActivatedModal);
+</script>
+
+</body>
+</html>
