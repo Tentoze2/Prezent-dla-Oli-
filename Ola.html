@@ -106,6 +106,7 @@
         }
 
         .modal, .modal-activated {
+          z-index: 3;
           position: fixed;
           top: 0;
           left: 0;
@@ -119,6 +120,7 @@
         }
 
         .modal-content, .modal-activated-content {
+          z-index: 3;
           background-color: white;
           padding: 20px;
           border-radius: 8px;
@@ -185,9 +187,8 @@
         }
 
 
-
         .legend-icon {
-          width: 30px;  /* Szerokość ikon */
+          width: 30px; /* Szerokość ikon */
           height: 30px; /* Wysokość ikon */
           position: absolute; /* Umożliwia nałożenie na box */
           z-index: 1; /* Wyświetlanie na wierzchu */
@@ -202,21 +203,24 @@
           top: 35px; /* Ustawienie drugiej ikony poniżej pierwszej */
           left: 5px; /* Odstęp od lewej krawędzi */
         }
+
         .legend-icon:nth-child(4) {
           top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
           left: 5px; /* Odstęp od lewej krawędzi */
         }
+
         .legend-icon:nth-child(5) {
           top: 95px; /* Ustawienie drugiej ikony poniżej pierwszej */
           left: 5px; /* Odstęp od lewej krawędzi */
         }
+
         .legend-icon:nth-child(6) {
           top: 125px; /* Ustawienie drugiej ikony poniżej pierwszej */
           left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .house {
-          background-image: url('https://i.ibb.co/8gZ9wMD/house.png');
+          background-image: url('https://i.ibb.co/r0RxYrz/Pngtree-vector-house-icon-4013710.png');
           background-size: cover;
         }
 
@@ -226,7 +230,7 @@
         }
 
         .sun {
-          background-image: url('https://i.ibb.co/fF5R6Qt/sun.png');
+          background-image: url('https://i.ibb.co/hL5QBbK/sun-icon-175968.png');
           background-size: cover;
         }
 
@@ -238,6 +242,7 @@
         /* Styl dla urządzeń mobilnych */
         @media (max-width: 600px) {
           .container {
+            margin-top: 10px;
             display: grid;
             align: center;
             grid-template-columns: repeat(2, 100px);
@@ -250,7 +255,7 @@
           }
 
           .legend-icon {
-            width: 20px;  /* Szerokość ikon */
+            width: 20px; /* Szerokość ikon */
             height: 20px; /* Wysokość ikon */
             position: absolute; /* Umożliwia nałożenie na box */
             z-index: 1; /* Wyświetlanie na wierzchu */
@@ -265,14 +270,17 @@
             top: 25px; /* Ustawienie drugiej ikony poniżej pierwszej */
             left: 5px; /* Odstęp od lewej krawędzi */
           }
+
           .legend-icon:nth-child(4) {
             top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
             left: 5px; /* Odstęp od lewej krawędzi */
           }
+
           .legend-icon:nth-child(5) {
             top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
             left: 5px; /* Odstęp od lewej krawędzi */
           }
+
           .legend-icon:nth-child(6) {
             top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
             left: 5px; /* Odstęp od lewej krawędzi */
@@ -296,37 +304,104 @@
         <div style="display: flex; justify-content: center;">
             <div class="container">
                 <!-- 24 kwadraty -->
-                <div class="box" data-id="1"><span>1</span></div>
+                <div class="box" data-id="1">
+                    <span>1</span>
+                    <div class="legend-icon snowflake"></div>
+                    <div class="legend-icon sun"></div>
+                    <div class="legend-icon house"></div>
+                </div>
                 <div class="box" data-id="2">
                     <span>2</span>
                     <div class="legend-icon snowflake"></div>
-                    <div class="legend-icon snowflake"></div>
-                    <div class="legend-icon snowflake"></div>
-                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="3">
+                    <span>3</span>
                     <div class="legend-icon snowflake"></div>
                 </div>
-                <div class="box" data-id="3">3</div>
-                <div class="box" data-id="4">4</div>
-                <div class="box" data-id="5">5</div>
-                <div class="box" data-id="6">6</div>
-                <div class="box" data-id="7">7</div>
-                <div class="box" data-id="8">8</div>
-                <div class="box" data-id="9">9</div>
-                <div class="box" data-id="10">10</div>
-                <div class="box" data-id="11">11</div>
-                <div class="box" data-id="12">12</div>
-                <div class="box" data-id="13">13</div>
-                <div class="box" data-id="14">14</div>
-                <div class="box" data-id="15">15</div>
-                <div class="box" data-id="16">16</div>
-                <div class="box" data-id="17">17</div>
-                <div class="box" data-id="18">18</div>
-                <div class="box" data-id="19">19</div>
-                <div class="box" data-id="20">20</div>
-                <div class="box" data-id="21">21</div>
-                <div class="box" data-id="22">22</div>
-                <div class="box" data-id="23">23</div>
-                <div class="box" data-id="24">24</div>
+                <div class="box" data-id="4">
+                    <span>4</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="5">
+                    <span>5</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="6">
+                    <span>6</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="7">
+                    <span>7</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="8">
+                    <span>8</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="9">
+                    <span>9</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="10">
+                    <span>10</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="11">
+                    <span>11</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="12">
+                    <span>12</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="13">
+                    <span>13</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="14">
+                    <span>14</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="15">
+                    <span>15</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="16">
+                    <span>16</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="17">
+                    <span>17</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="18">
+                    <span>18</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="19">
+                    <span>19</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="20">
+                    <span>20</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="21">
+                    <span>21</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="22">
+                    <span>22</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="23">
+                    <span>23</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
+                <div class="box" data-id="24">
+                    <span>24</span>
+                    <div class="legend-icon snowflake"></div>
+                </div>
             </div>
         </div>
         <div class="rewards-right">
