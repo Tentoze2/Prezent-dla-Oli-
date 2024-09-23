@@ -6,106 +6,240 @@
     <title>Kalendarz Randkowy</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #f0f0f0;
+          padding: 0px;
+        }
+
+        /* Układ strony */
+        .page-layout {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        /* Boxy z nagrodami po lewej i prawej stronie */
+        .rewards-left, .rewards-right {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          margin: auto;
+          gap: 40px;
+        }
+
+        .reward-box {
+          width: 150px;
+          height: 150px;
+          background-color: #ffd700;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 16px;
+          font-weight: bold;
+          color: #333;
+          border-radius: 8px;
+          cursor: pointer;
+          opacity: 0.5; /* Nagroda nieaktywna na początku */
+          transition: opacity 0.3s;
+        }
+
+        /* Aktywne nagrody */
+        .reward-box.active {
+          opacity: 1;
+        }
+
+        /* Dla urządzeń mobilnych */
+        @media (max-width: 600px) {
+          .page-layout {
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+          }
+
+          .rewards-left, .rewards-right {
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+          }
+
+          .reward-box {
+            width: 100%;
+            height: 100px;
+          }
         }
+
+
         .container {
-            display: grid;
-            grid-template-columns: repeat(6, 100px);
-            grid-gap: 10px;
+          display: grid;
+          justify-content: center;
+          grid-template-columns: repeat(6, 170px);
+          grid-gap: 10px;
         }
+
         .box {
+          width: 170px;
+          height: 170px;
+          background-color: #ffcccb;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: #333333;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .box.active {
+          background-color: #90ee90;
+        }
+
+        .modal, .modal-activated {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          visibility: hidden;
+        }
+
+        .modal-content, .modal-activated-content {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 80%;
+          max-width: 400px;
+        }
+        .modal-reward {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          visibility: hidden;
+        }
+
+        .modal-reward-content {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 80%;
+          max-width: 400px;
+        }
+
+        .modal-reward.show {
+          visibility: visible;
+        }
+
+        .reward-claim-btn {
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #008000;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+
+        .modal.show, .modal-activated.show {
+          visibility: visible;
+        }
+
+        .close-btn {
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #ff4500;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+
+        .activate-btn {
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #008000;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+
+        /* Styl dla urządzeń mobilnych */
+        @media (max-width: 600px) {
+          .container {
+            display: grid;
+            align: center;
+            grid-template-columns: repeat(2, 100px);
+            grid-gap: 20px;
+          }
+
+          .box {
             width: 100px;
             height: 100px;
-            background-color: #ffcccb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .box.active {
-            background-color: #90ee90;
-        }
-        .modal, .modal-activated {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            visibility: hidden;
-        }
-        .modal-content, .modal-activated-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
-        }
-        .modal.show, .modal-activated.show {
-            visibility: visible;
-        }
-        .close-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff4500;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .activate-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #008000;
-            color: white;
-            border: none;
-            cursor: pointer;
+          }
         }
     </style>
 </head>
 <body>
+<div style="text-align: center;  width: 100%; margin-bottom: 20px;">
+    <h1>Kalendarz randek</h1>
 
-<div class="container">
-    <!-- 24 kwadraty -->
-    <div class="box" data-id="1">1</div>
-    <div class="box" data-id="2">2</div>
-    <div class="box" data-id="3">3</div>
-    <div class="box" data-id="4">4</div>
-    <div class="box" data-id="5">5</div>
-    <div class="box" data-id="6">6</div>
-    <div class="box" data-id="7">7</div>
-    <div class="box" data-id="8">8</div>
-    <div class="box" data-id="9">9</div>
-    <div class="box" data-id="10">10</div>
-    <div class="box" data-id="11">11</div>
-    <div class="box" data-id="12">12</div>
-    <div class="box" data-id="13">13</div>
-    <div class="box" data-id="14">14</div>
-    <div class="box" data-id="15">15</div>
-    <div class="box" data-id="16">16</div>
-    <div class="box" data-id="17">17</div>
-    <div class="box" data-id="18">18</div>
-    <div class="box" data-id="19">19</div>
-    <div class="box" data-id="20">20</div>
-    <div class="box" data-id="21">21</div>
-    <div class="box" data-id="22">22</div>
-    <div class="box" data-id="23">23</div>
-    <div class="box" data-id="24">24</div>
+    <div class="page-layout">
+        <!-- Boxy z nagrodami po lewej stronie -->
+        <div class="rewards-left">
+            <div class="reward-box" data-reward-id="1">Nagroda 1</div>
+            <div class="reward-box" data-reward-id="2">Nagroda 2</div>
+            <div class="reward-box" data-reward-id="3">Nagroda 3</div>
+            <div class="reward-box" data-reward-id="4">Nagroda 4</div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div class="container">
+                <!-- 24 kwadraty -->
+                <div class="box" data-id="1">1</div>
+                <div class="box" data-id="2">2</div>
+                <div class="box" data-id="3">3</div>
+                <div class="box" data-id="4">4</div>
+                <div class="box" data-id="5">5</div>
+                <div class="box" data-id="6">6</div>
+                <div class="box" data-id="7">7</div>
+                <div class="box" data-id="8">8</div>
+                <div class="box" data-id="9">9</div>
+                <div class="box" data-id="10">10</div>
+                <div class="box" data-id="11">11</div>
+                <div class="box" data-id="12">12</div>
+                <div class="box" data-id="13">13</div>
+                <div class="box" data-id="14">14</div>
+                <div class="box" data-id="15">15</div>
+                <div class="box" data-id="16">16</div>
+                <div class="box" data-id="17">17</div>
+                <div class="box" data-id="18">18</div>
+                <div class="box" data-id="19">19</div>
+                <div class="box" data-id="20">20</div>
+                <div class="box" data-id="21">21</div>
+                <div class="box" data-id="22">22</div>
+                <div class="box" data-id="23">23</div>
+                <div class="box" data-id="24">24</div>
+            </div>
+        </div>
+        <div class="rewards-right">
+            <div class="reward-box" data-reward-id="5">Mega big WIN</div>
+        </div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <p id="reward-counter"></p>
+    </div>
 </div>
-
 <div class="modal" id="modal">
     <div class="modal-content">
         <p id="modal-text">Opis randki...</p>
@@ -120,6 +254,14 @@
         <button class="close-btn" id="close-activated-btn">Zamknij</button>
     </div>
 </div>
+
+<div class="modal-reward" id="modal-reward">
+    <div class="modal-reward-content">
+        <p id="reward-text">Opis nagrody...</p>
+        <button class="reward-claim-btn" id="claim-reward-btn">Odbierz nagrodę</button>
+    </div>
+</div>
+
 
 <script>
     const boxes = document.querySelectorAll('.box');
@@ -172,6 +314,8 @@
         modalActivated.classList.add('show');
         activatedText.textContent = `Zadanie na dziś: ${randki[index - 1]}`;
         document.querySelector(`.box[data-id="${index}"]`).classList.add('active');
+        updateRewardCounter();
+        updateRewards()
         modal.classList.remove('show');
     }
 
@@ -183,6 +327,38 @@
     function closeActivatedModal() {
         modalActivated.classList.remove('show');
     }
+    const nagrody = [
+        { id: 1, requiredDates: 1, description: "Bon na wspólną kolację" },
+        { id: 2, requiredDates: 3, description: "Bon na wspólną kolację2" },
+        { id: 3, requiredDates: 7, description: "Bon na wspólną kolację3" },
+        { id: 4, requiredDates: 10, description: "Bon na wspólną kolację4" },
+        { id: 5, requiredDates: 15,description: "Bon na wspólną kolację5" }
+    ];
+
+    // Funkcja aktualizująca stan nagród
+    function updateRewards() {
+        let activatedDates = 0;
+
+        // Sprawdzamy ile randek zostało aktywowanych
+        for (let i = 1; i <= 24; i++) {
+            if (localStorage.getItem(`activated-${i}`)) {
+                activatedDates++;
+            }
+        }
+
+        // Odblokowujemy nagrody na podstawie liczby aktywowanych randek
+        nagrody.forEach(reward => {
+            const rewardBox = document.querySelector(`.reward-box[data-reward-id="${reward.id}"]`);
+            if (activatedDates >= reward.requiredDates) {
+                rewardBox.classList.add('active');
+            } else {
+                rewardBox.classList.remove('active');
+            }
+        });
+    }
+
+    // Wywołujemy funkcję przy starcie i po każdej aktywacji randki
+    updateRewards();
 
     // Obsługa kliknięcia na kwadrat
     boxes.forEach(box => {
@@ -197,6 +373,81 @@
             box.classList.add('active');
         }
     });
+
+    const rewardModal = document.getElementById('modal-reward');
+    const rewardText = document.getElementById('reward-text');
+    const claimRewardBtn = document.getElementById('claim-reward-btn');
+    const closeRewardBtn = document.getElementById('close-reward-btn');
+
+    // Funkcja pokazująca modal dla nagrody
+    function showRewardModal(rewardId) {
+        const reward = nagrody.find(r => r.id == rewardId);
+        rewardText.textContent = `Nagroda ${reward.id}: ${reward.description} - Gratulacje! Odbierz swoją nagrodę!`;
+        rewardModal.classList.add('show');
+        claimRewardBtn.onclick = () => claimReward(rewardId);
+    }
+
+    // Funkcja odbierająca nagrodę
+    function claimReward(rewardId) {
+        rewardModal.classList.remove('show');
+        // Możesz tutaj dodać logikę do zapisania w localStorage, jeśli chcesz np. zaznaczyć odebrane nagrody
+    }
+
+    // Funkcja zamykająca modal nagrody
+    function closeRewardModal() {
+        rewardModal.classList.remove('show');
+    }
+
+    // Obsługa kliknięcia na nagrodę
+    const rewardBoxes = document.querySelectorAll('.reward-box');
+    rewardBoxes.forEach(box => {
+        box.addEventListener('click', () => {
+            if (box.classList.contains('active')) {
+                const rewardId = box.getAttribute('data-reward-id');
+                showRewardModal(rewardId);
+            }
+        });
+    });
+
+    const rewardCounter = document.getElementById('reward-counter');
+
+    function getRandkaLabel(count) {
+        if (count === 1) {
+            return 'randka';
+        } else if (count >= 2 && count <= 4) {
+            return 'randki';
+        } else {
+            return 'randek';
+        }
+    }
+
+    // Funkcja aktualizująca licznik nagród
+    function updateRewardCounter() {
+        let activatedDates = 0;
+
+        // Sprawdzamy, ile randek zostało aktywowanych
+        for (let i = 1; i <= 24; i++) {
+            if (localStorage.getItem(`activated-${i}`)) {
+                activatedDates++;
+            }
+        }
+
+        // Znajdujemy kolejną nagrodę do odebrania
+        const nextReward = nagrody.find(reward => activatedDates < reward.requiredDates);
+
+
+        // Wyświetlamy licznik nagród lub informację, że wszystkie nagrody zostały odebrane
+        if (nextReward) {
+            const randkiDoNagrody = nextReward.requiredDates - activatedDates;
+            const randkaLabel = getRandkaLabel(randkiDoNagrody);
+            rewardCounter.textContent = `Do kolejnej nagrody zostało ${randkiDoNagrody} ${randkaLabel}.`;
+        } else {
+            rewardCounter.textContent = "Wszystkie nagrody zostały odebrane!";
+        }
+    }
+
+    // Wywołujemy funkcję po każdej aktywacji randki i po załadowaniu strony
+    updateRewardCounter();
 
     closeBtn.addEventListener('click', closeModal);
     closeActivatedBtn.addEventListener('click', closeActivatedModal);
