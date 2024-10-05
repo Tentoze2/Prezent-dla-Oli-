@@ -6,285 +6,377 @@
     <title>Kalendarz Randkowy</title>
     <style>
         body {
-          font-family: Arial, sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: #f0f0f0;
-          padding: 0px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 0px;
         }
 
         /* Układ strony */
         .page-layout {
-          display: flex;
-          justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
         }
 
         /* Boxy z nagrodami po lewej i prawej stronie */
         .rewards-left, .rewards-right {
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          margin: auto;
-          gap: 40px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            margin: auto;
+            gap: 40px;
         }
 
         .reward-box {
-          width: 150px;
-          height: 150px;
-          background-color: #ffd700;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 16px;
-          font-weight: bold;
-          color: #333333;
-          border-radius: 8px;
-          cursor: pointer;
-          opacity: 0.5; /* Nagroda nieaktywna na początku */
-          transition: opacity 0.3s;
+            width: 150px;
+            height: 150px;
+            background-color: #ffd700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.5; /* Nagroda nieaktywna na początku */
+            transition: opacity 0.3s;
         }
 
         /* Aktywne nagrody */
         .reward-box.active {
-          opacity: 1;
+            opacity: 1;
         }
 
         /* Dla urządzeń mobilnych */
         @media (max-width: 600px) {
-          .page-layout {
-            flex-direction: column;
-            align-items: center;
-          }
+            .page-layout {
+                flex-direction: column;
+                align-items: center;
+            }
 
-          .rewards-left, .rewards-right {
-            flex-direction: row;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-          }
+            .rewards-left, .rewards-right {
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 20px;
+            }
 
-          .reward-box {
-            width: 100%;
-            height: 100px;
-          }
+            .reward-box {
+                width: 100%;
+                height: 100px;
+            }
         }
 
 
         .container {
-          display: grid;
-          justify-content: center;
-          grid-template-columns: repeat(6, 170px);
-          grid-gap: 10px;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(6, 170px);
+            grid-gap: 10px;
         }
 
         .legendBox {
-          display: grid;
-          background-size: auto;
-          justify-content: flex-start;
-          align-items: start;
+            display: grid;
+            background-size: auto;
+            justify-content: flex-start;
+            align-items: start;
         }
 
         .box {
-          position: relative;
-          width: 170px;
-          height: 170px;
-          background-color: #ffcccb;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 18px;
-          font-weight: bold;
-          color: #333333;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: background-color 0.3s;
+            position: relative;
+            width: 170px;
+            height: 170px;
+            background-color: #ffcccb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .box.active {
-          background-color: #90ee90;
+            background-color: #90ee90;
         }
 
         .modal, .modal-activated {
-          z-index: 3;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          visibility: hidden;
+            z-index: 3;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
         }
 
         .modal-content, .modal-activated-content {
-          z-index: 3;
-          background-color: white;
-          padding: 20px;
-          border-radius: 8px;
-          text-align: center;
-          width: 80%;
-          max-width: 400px;
+            z-index: 3;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
         }
 
         .modal-reward {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          visibility: hidden;
+            z-index: 3;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
         }
 
         .modal-reward-content {
-          background-color: white;
-          padding: 20px;
-          border-radius: 8px;
-          text-align: center;
-          width: 80%;
-          max-width: 400px;
+
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
         }
 
         .modal-reward.show {
-          visibility: visible;
+            visibility: visible;
         }
 
         .reward-claim-btn {
-          margin-top: 20px;
-          padding: 10px 20px;
-          background-color: #008000;
-          color: white;
-          border: none;
-          cursor: pointer;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008000;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
         .modal.show, .modal-activated.show {
-          visibility: visible;
+            visibility: visible;
         }
 
         .close-btn {
-          margin-top: 20px;
-          padding: 10px 20px;
-          background-color: #ff4500;
-          color: white;
-          border: none;
-          cursor: pointer;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
         .activate-btn {
-          margin-top: 20px;
-          padding: 10px 20px;
-          background-color: #008000;
-          color: white;
-          border: none;
-          cursor: pointer;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008000;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
 
         .legend-icon {
-          width: 30px; /* Szerokość ikon */
-          height: 30px; /* Wysokość ikon */
-          position: absolute; /* Umożliwia nałożenie na box */
-          z-index: 1; /* Wyświetlanie na wierzchu */
+            top: 5px; /* Odstęp od góry boxa */
+            left: 5px; /* Odstęp od lewej krawędzi */
+            width: 30px; /* Szerokość ikon */
+            height: 30px; /* Wysokość ikon */
+            position: absolute; /* Umożliwia nałożenie na box */
+            z-index: 1; /* Wyświetlanie na wierzchu */
         }
 
         .legend-icon:nth-child(2) {
-          top: 5px; /* Odstęp od góry boxa */
-          left: 5px; /* Odstęp od lewej krawędzi */
+            top: 35px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(3) {
-          top: 35px; /* Ustawienie drugiej ikony poniżej pierwszej */
-          left: 5px; /* Odstęp od lewej krawędzi */
+            top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(4) {
-          top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
-          left: 5px; /* Odstęp od lewej krawędzi */
+            top: 95px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(5) {
-          top: 95px; /* Ustawienie drugiej ikony poniżej pierwszej */
-          left: 5px; /* Odstęp od lewej krawędzi */
+            top: 125px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
         }
 
-        .legend-icon:nth-child(6) {
-          top: 125px; /* Ustawienie drugiej ikony poniżej pierwszej */
-          left: 5px; /* Odstęp od lewej krawędzi */
+
+        .legend-right-icon {
+            top: 5px;
+            right: 5px;
+            width: 30px; /* Szerokość ikon */
+            height: 30px; /* Wysokość ikon */
+            position: absolute; /* Umożliwia nałożenie na box */
+            z-index: 1; /* Wyświetlanie na wierzchu */
+        }
+
+        .legend-right-icon:nth-child(2) {
+            top: 35px; /* Odstęp od góry boxa */
+            right: 10px; /* Wyświetlanie na wierzchu */
+        }
+
+        .legend-right-icon:nth-child(3) {
+            top: 65px; /* Odstęp od góry boxa */
+            right: 5px; /* Wyświetlanie na wierzchu */
         }
 
         .house {
-          background-image: url('https://i.ibb.co/r0RxYrz/Pngtree-vector-house-icon-4013710.png');
-          background-size: cover;
+            background-image: url('https://i.ibb.co/r0RxYrz/Pngtree-vector-house-icon-4013710.png');
+            background-size: cover;
         }
 
         .snowflake {
-          background-image: url('https://i.ibb.co/7QGwDGy/Pngtree-winter-next-month-simple-six-sided-5525426.png');
-          background-size: cover;
+            background-image: url('https://i.ibb.co/7QGwDGy/Pngtree-winter-next-month-simple-six-sided-5525426.png');
+            background-size: cover;
         }
 
         .sun {
-          background-image: url('https://i.ibb.co/hL5QBbK/sun-icon-175968.png');
-          background-size: cover;
+            background-image: url('https://i.ibb.co/hL5QBbK/sun-icon-175968.png');
+            background-size: cover;
+        }
+
+        .sport {
+            background-image: url('https://i.ibb.co/CbTHcRN/sports-running-icon-21.png');
+            background-size: cover;
+        }
+        .camera {
+            background-image: url('https://i.ibb.co/xXpW2qM/camera-icon-isolated-on-transparent-background-png.webp');
+            background-size: cover;
+        }
+        .tree {
+            background-image: url('https://i.ibb.co/LPgZ30J/490091.png');
+            background-size: cover;
+        }
+        .food {
+            background-image: url('https://i.ibb.co/MhrdVW6/5235253.png');
+            background-size: cover;
+        }
+        .heart {
+            background-image: url('https://i.ibb.co/fYZN7L4/valentine-heart-icon-6.png');
+            background-size: cover;
+        }
+        .star {
+            background-image: url('https://i.ibb.co/6FmTSVN/3805311.png');
+            background-size: cover;
+        }
+        .game {
+            background-image: url('https://i.ibb.co/SXD2Md5/among-us-play-512x512.png');
+            background-size: cover;
+        }
+        .film {
+            background-image: url('https://i.ibb.co/By6p59z/movie-icon-1.png');
+            background-size: cover;
+            width: 35px;
+            height: 35px;
+            left: 2px;
+            top: 2px;
+        }
+        .water {
+            background-image: url('https://i.ibb.co/LzJfX7J/1235535-200.png');
+            background-size: cover;
         }
 
         .box {
-          position: relative; /* Umożliwia pozycjonowanie ikon w obrębie boxa */
-          /* inne style boxa */
+            position: relative; /* Umożliwia pozycjonowanie ikon w obrębie boxa */
+            /* inne style boxa */
         }
 
         /* Styl dla urządzeń mobilnych */
         @media (max-width: 600px) {
-          .container {
-            margin-top: 10px;
-            display: grid;
-            align: center;
-            grid-template-columns: repeat(2, 100px);
-            grid-gap: 20px;
-          }
+            .container {
+                margin-top: 10px;
+                display: grid;
+                align: center;
+                grid-template-columns: repeat(2, 100px);
+                grid-gap: 20px;
+            }
 
-          .box {
-            width: 100px;
-            height: 100px;
-          }
+            .box {
+                width: 100px;
+                height: 100px;
+            }
 
-          .legend-icon {
-            width: 20px; /* Szerokość ikon */
-            height: 20px; /* Wysokość ikon */
-            position: absolute; /* Umożliwia nałożenie na box */
-            z-index: 1; /* Wyświetlanie na wierzchu */
-          }
+            .legend-right-icon {
+                top: 5px;
+                right: 5px;
+                width: 30px; /* Szerokość ikon */
+                height: 30px; /* Wysokość ikon */
+                position: absolute; /* Umożliwia nałożenie na box */
+                z-index: 1; /* Wyświetlanie na wierzchu */
+            }
 
-          .legend-icon:nth-child(2) {
-            top: 5px; /* Odstęp od góry boxa */
-            left: 5px; /* Odstęp od lewej krawędzi */
-          }
+            .legend-right-icon:nth-child(2) {
+                top: 35px; /* Odstęp od góry boxa */
+                right: 5px; /* Wyświetlanie na wierzchu */
+            }
 
-          .legend-icon:nth-child(3) {
-            top: 25px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
-          }
+            .legend-icon {
+                top: 5px; /* Odstęp od góry boxa */
+                left: 5px; /* Odstęp od lewej krawędzi */
+                width: 20px; /* Szerokość ikon */
+                height: 20px; /* Wysokość ikon */
+                position: absolute; /* Umożliwia nałożenie na box */
+                z-index: 1; /* Wyświetlanie na wierzchu */
+            }
 
-          .legend-icon:nth-child(4) {
-            top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
-          }
+            .legend-icon:nth-child(2) {
+                top: 25px; /* Ustawienie drugiej ikony poniżej pierwszej */
+                left: 5px; /* Odstęp od lewej krawędzi */
+            }
 
-          .legend-icon:nth-child(5) {
-            top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
-          }
+            .legend-icon:nth-child(3) {
+                top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
+                left: 5px; /* Odstęp od lewej krawędzi */
+            }
 
-          .legend-icon:nth-child(6) {
-            top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
-          }
+            .legend-icon:nth-child(4) {
+                top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
+                left: 5px; /* Odstęp od lewej krawędzi */
+            }
+
+            .legend-icon:nth-child(5) {
+                top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
+                left: 5px; /* Odstęp od lewej krawędzi */
+            }
+
+
+            .legend-right-icon {
+                top: 5px;
+                right: 5px;
+                width: 30px; /* Szerokość ikon */
+                height: 30px; /* Wysokość ikon */
+                position: absolute; /* Umożliwia nałożenie na box */
+                z-index: 1; /* Wyświetlanie na wierzchu */
+            }
+
+            .legend-right-icon:nth-child(2) {
+                top: 35px; /* Odstęp od góry boxa */
+                right: 5px; /* Wyświetlanie na wierzchu */
+            }
+
+            .legend-right-icon:nth-child(3) {
+                top: 65px; /* Odstęp od góry boxa */
+                right: 5px; /* Wyświetlanie na wierzchu */
+            }
+
         }
 
     </style>
@@ -306,102 +398,316 @@
                 <!-- 24 kwadraty -->
                 <div class="box" data-id="1">
                     <span>1</span>
-                    <div class="legend-icon snowflake"></div>
-                    <div class="legend-icon sun"></div>
-                    <div class="legend-icon house"></div>
+                    <div>
+                        <div class="legend-icon snowflake"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon sport"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 7px;">0°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="2">
                     <span>2</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon camera"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon tree"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="3">
                     <span>3</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="4">
                     <span>4</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon star"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="5">
                     <span>5</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="6">
                     <span>6</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon sport"></div>
+                        <div class="legend-icon tree"></div>
+                        <div class="legend-icon sun"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon">20°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="7">
                     <span>7</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="8">
                     <span>8</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon tree"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon">20°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="9">
                     <span>9</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon house"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">?</div>
+                        <div class="legend-right-icon" style="right: 5px;">?</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="10">
                     <span>10</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon game"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon star"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="11">
                     <span>11</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="12">
                     <span>12</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon film"></div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon house"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="13">
                     <span>13</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon star"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="14">
                     <span>14</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon water"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon">15°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="15">
                     <span>15</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon house"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon"  style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="16">
                     <span>16</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="17">
                     <span>17</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon game"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="18">
                     <span>18</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon game"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon star"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="19">
                     <span>19</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon house"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="20">
                     <span>20</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon camera"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$$</div>
+                        <div class="legend-right-icon" style="right: 5px;">?</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="21">
                     <span>21</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon game"></div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="22">
                     <span>22</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon tree"></div>
+                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon leaf"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon">10°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="23">
                     <span>23</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon snowflake"></div>
+                        <div class="legend-icon food"></div>
+                        <div class="legend-icon heart"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$$</div>
+                        <div class="legend-right-icon" style="right: 7px;">5°C</div>
+                    </div>
                 </div>
+
                 <div class="box" data-id="24">
                     <span>24</span>
-                    <div class="legend-icon snowflake"></div>
+                    <div>
+                        <div class="legend-icon house"></div>
+                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon star"></div>
+                    </div>
+                    <div>
+                        <div class="legend-right-icon">$</div>
+                        <div class="legend-right-icon" style="right: 5px;">-</div>
+                    </div>
                 </div>
+
             </div>
         </div>
         <div class="rewards-right">
@@ -473,9 +779,36 @@
         "Dzień z książką" //
     ];
 
+    const opisRandek = [
+        "A co gdyby było ślisko?",
+        "Zdjęcia mogą nie oddawać tego co widzimy, chociaż???",
+        "Ameryki, Afryka, Azja, Europa, Afryka i co my tu mamy wybrać",
+        "Gwiazdy, gdzie te kurwa gwiazdy. Ola widzisz coś?",
+        "AAAAA to boli. Weź mnie za nogę. Utrzymasz mnie? Nie ma szans nie damy rady.",
+        "I na co nam to prawo jazdy.",
+        "No cóż trzeba od czasu do czasu coś zjeść",
+        "Koc, trawa i wino. Czego tu więcej potrzeba? A no tak zapomniałem...",
+        "Wstaw tu swój opis!",
+        "No to akurat już było. MISJA W TOKIO UDANA?",
+        "Niby taki prosty rulon, a ile pracy? Co najmniej zawsze smaczny wychodzi",
+        "CZAS WYBUDOWAĆ BAZĘ I SPĘDZIĆ TAM WIECZÓR",
+        "Oj trudne sie wylosowało, co najmniej dla mnie",
+        "Chlapu chlapu kompu kompu(nie wiedziałem co tu dać)",
+        "Hopsa, hopsa, o kurwa złamałem nogę.",
+        "MMM coś dużego, ciekawie pachnie, gumowa konstystencja aaa to tylko ...",
+        "Dwa kije, dwie piłki jedno pole co się może źle stać, prawda?",
+        "No może to nie kosmos ale podobno ma być tak samo fajnie (chyba że nazwa kłamie, choć wiemy że nie)",
+        "No niech to znowu chujowe miejsca, ale co najmniej tanie były",
+        "Losu losu losu no tam faktycznie jeszcze nie bylismy. Ale czy naprawdę musimy jechać do ...?",
+        "Potrzeba dwojga, a może jednak nie to? Zobaczymy.",
+        "NIE TEGO SIE NIE ZBIERA, NIE NIE MOŻESZ TEGO ZJEŚĆ",
+        "Te święta będa wyjątkowe. A nie jednak Książulo mówił że lepiej zjeśc Kebsa no cóź...",
+        "Chłopki, Oczy Smoka kiedyś na wszystkich przyjdzie czas"
+    ];
+
     // Funkcja pokazująca modal z opisem randki
     function showModal(index) {
-        modalText.textContent = randki[index - 1];
+        modalText.textContent = opisRandek[index - 1]; // Używamy opisu z nowej tablicy
         modal.classList.add('show');
         activateBtn.onclick = () => activateDate(index);
     }
