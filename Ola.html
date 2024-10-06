@@ -102,7 +102,7 @@
         }
 
         .box.active {
-            background-color: #90ee90;
+            background-color: rgba(144, 238, 144, 0.9);
         }
 
         .modal, .modal-activated {
@@ -227,6 +227,9 @@
             position: absolute; /* Umożliwia nałożenie na box */
             z-index: 1; /* Wyświetlanie na wierzchu */
         }
+        .long-text {
+            right: 15px;
+        }
 
         .legend-right-icon:nth-child(2) {
             top: 35px; /* Odstęp od góry boxa */
@@ -277,8 +280,16 @@
             background-image: url('https://i.ibb.co/6FmTSVN/3805311.png');
             background-size: cover;
         }
+        .book {
+            background-image: url('https://i.ibb.co/FKsdhNh/open-book-icon-7991a2.png');
+            background-size: cover;
+        }
         .game {
             background-image: url('https://i.ibb.co/SXD2Md5/among-us-play-512x512.png');
+            background-size: cover;
+        }
+        .theatre {
+            background-image: url('https://i.ibb.co/5Fj50sH/comedy-drama-masks-theater-theatre-icon-5.png');
             background-size: cover;
         }
         .film {
@@ -293,14 +304,26 @@
             background-image: url('https://i.ibb.co/LzJfX7J/1235535-200.png');
             background-size: cover;
         }
+        .leaf {
+            background-image: url('https://i.ibb.co/RYfrC4D/leaves-autumn-icon-png.webp');
+            background-size: cover;
+        }
 
         .box {
+            background-color: rgba(255, 255, 255, 0.8); /* Lekko przezroczyste tło */
+            border: 1px solid black;
             position: relative; /* Umożliwia pozycjonowanie ikon w obrębie boxa */
             /* inne style boxa */
         }
 
         /* Styl dla urządzeń mobilnych */
         @media (max-width: 600px) {
+
+            body {
+                background: url('https://i.ibb.co/WnnpNrx/peakpx.jpg') no-repeat center center fixed;
+                background-size: cover; /* Dopasowuje obrazek do rozmiaru ekranu */
+            }
+
             .container {
                 margin-top: 10px;
                 display: grid;
@@ -313,19 +336,29 @@
                 width: 100px;
                 height: 100px;
             }
+            .long-text {
+                right: 10px !important;
+            }
+            .even-longer-text {
+                right: 18px !important;
+            }
 
             .legend-right-icon {
                 top: 5px;
-                right: 5px;
-                width: 30px; /* Szerokość ikon */
-                height: 30px; /* Wysokość ikon */
+                right: 6px;
+                width: 20px; /* Szerokość ikon */
+                height: 20px; /* Wysokość ikon */
                 position: absolute; /* Umożliwia nałożenie na box */
                 z-index: 1; /* Wyświetlanie na wierzchu */
             }
 
             .legend-right-icon:nth-child(2) {
-                top: 35px; /* Odstęp od góry boxa */
-                right: 5px; /* Wyświetlanie na wierzchu */
+                top: 25px; /* Odstęp od góry boxa */
+                right: 6px; /* Wyświetlanie na wierzchu */
+            }
+            .legend-right-icon:nth-child(3) {
+                top: 45px; /* Odstęp od góry boxa */
+                right: 6px; /* Wyświetlanie na wierzchu */
             }
 
             .legend-icon {
@@ -358,24 +391,7 @@
             }
 
 
-            .legend-right-icon {
-                top: 5px;
-                right: 5px;
-                width: 30px; /* Szerokość ikon */
-                height: 30px; /* Wysokość ikon */
-                position: absolute; /* Umożliwia nałożenie na box */
-                z-index: 1; /* Wyświetlanie na wierzchu */
-            }
 
-            .legend-right-icon:nth-child(2) {
-                top: 35px; /* Odstęp od góry boxa */
-                right: 5px; /* Wyświetlanie na wierzchu */
-            }
-
-            .legend-right-icon:nth-child(3) {
-                top: 65px; /* Odstęp od góry boxa */
-                right: 5px; /* Wyświetlanie na wierzchu */
-            }
 
         }
 
@@ -400,12 +416,12 @@
                     <span>1</span>
                     <div>
                         <div class="legend-icon snowflake"></div>
-                        <div class="legend-icon sun"></div>
                         <div class="legend-icon sport"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
-                        <div class="legend-right-icon" style="right: 7px;">0°C</div>
+                        <div class="long-text legend-right-icon ">0°C</div>
+                        <div class="legend-right-icon">1D</div>
                     </div>
                 </div>
 
@@ -419,6 +435,8 @@
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
+
                     </div>
                 </div>
 
@@ -427,11 +445,12 @@
                     <div>
                         <div class="legend-icon food"></div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">1D</div>
+
                     </div>
                 </div>
 
@@ -440,11 +459,11 @@
                     <div>
                         <div class="legend-icon star"></div>
                         <div class="legend-icon heart"></div>
-                        <div class="legend-icon sun"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">1W</div>
                     </div>
                 </div>
 
@@ -452,12 +471,12 @@
                     <span>5</span>
                     <div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
-                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon sport"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">1H</div>
                     </div>
                 </div>
 
@@ -470,7 +489,8 @@
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
-                        <div class="legend-right-icon">20°C</div>
+                        <div class="legend-right-icon even-longer-text">20°C</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -478,12 +498,12 @@
                     <span>7</span>
                     <div>
                         <div class="legend-icon food"></div>
-                        <div class="legend-icon heart"></div>
-                        <div class="legend-icon sun"></div>
+                        <div class="legend-icon star"></div>
                     </div>
                     <div>
-                        <div class="legend-right-icon">$$$</div>
+                        <div class="legend-right-icon long-text">$$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">1D</div>
                     </div>
                 </div>
 
@@ -496,20 +516,22 @@
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
-                        <div class="legend-right-icon">20°C</div>
+                        <div class="legend-right-icon even-longer-text">20°C</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
                 <div class="box" data-id="9">
                     <span>9</span>
                     <div>
-                        <div class="legend-icon heart"></div>
-                        <div class="legend-icon sun"></div>
-                        <div class="legend-icon house"></div>
+                        <div class="legend-icon ">?</div>
+                        <div class="legend-icon ">?</div>
+                        <div class="legend-icon ">?</div>
                     </div>
                     <div>
                         <div class="legend-right-icon">?</div>
                         <div class="legend-right-icon" style="right: 5px;">?</div>
+                        <div class="legend-right-icon">?</div>
                     </div>
                 </div>
 
@@ -518,11 +540,11 @@
                     <div>
                         <div class="legend-icon game"></div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon star"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -531,11 +553,11 @@
                     <div>
                         <div class="legend-icon food"></div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -549,6 +571,7 @@
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -562,6 +585,7 @@
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">0H</div>
                     </div>
                 </div>
 
@@ -569,25 +593,25 @@
                     <span>14</span>
                     <div>
                         <div class="legend-icon sun"></div>
-                        <div class="legend-icon heart"></div>
                         <div class="legend-icon water"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
-                        <div class="legend-right-icon">15°C</div>
+                        <div class="legend-right-icon even-longer-text">15°C</div>
+                        <div class="legend-right-icon">1D</div>
                     </div>
                 </div>
 
                 <div class="box" data-id="15">
                     <span>15</span>
                     <div>
-                        <div class="legend-icon heart"></div>
                         <div class="legend-icon sun"></div>
-                        <div class="legend-icon house"></div>
+                        <div class="legend-icon sport"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon"  style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3D</div>
                     </div>
                 </div>
 
@@ -596,11 +620,11 @@
                     <div>
                         <div class="legend-icon food"></div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -609,11 +633,12 @@
                     <div>
                         <div class="legend-icon game"></div>
                         <div class="legend-icon sun"></div>
-                        <div class="legend-icon heart"></div>
+                        <div class="legend-icon sport"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">1D</div>
                     </div>
                 </div>
 
@@ -621,12 +646,12 @@
                     <span>18</span>
                     <div>
                         <div class="legend-icon game"></div>
-                        <div class="legend-icon house"></div>
                         <div class="legend-icon star"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -634,12 +659,13 @@
                     <span>19</span>
                     <div>
                         <div class="legend-icon heart"></div>
-                        <div class="legend-icon sun"></div>
-                        <div class="legend-icon house"></div>
+                        <div class="legend-icon theatre"></div>
+
                     </div>
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">2W</div>
                     </div>
                 </div>
 
@@ -648,11 +674,11 @@
                     <div>
                         <div class="legend-icon sun"></div>
                         <div class="legend-icon heart"></div>
-                        <div class="legend-icon camera"></div>
                     </div>
                     <div>
-                        <div class="legend-right-icon">$$$</div>
+                        <div class="legend-right-icon long-text">$$$</div>
                         <div class="legend-right-icon" style="right: 5px;">?</div>
+                        <div class="legend-right-icon">4W</div>
                     </div>
                 </div>
 
@@ -661,11 +687,11 @@
                     <div>
                         <div class="legend-icon game"></div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">2H</div>
                     </div>
                 </div>
 
@@ -678,7 +704,8 @@
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
-                        <div class="legend-right-icon">10°C</div>
+                        <div class="legend-right-icon even-longer-text">10°C</div>
+                        <div class="legend-right-icon">2H</div>
                     </div>
                 </div>
 
@@ -692,6 +719,7 @@
                     <div>
                         <div class="legend-right-icon">$$</div>
                         <div class="legend-right-icon" style="right: 7px;">5°C</div>
+                        <div class="legend-right-icon">3W</div>
                     </div>
                 </div>
 
@@ -699,12 +727,13 @@
                     <span>24</span>
                     <div>
                         <div class="legend-icon house"></div>
-                        <div class="legend-icon heart"></div>
-                        <div class="legend-icon star"></div>
+                        <div class="legend-icon book"></div>
+
                     </div>
                     <div>
                         <div class="legend-right-icon">$</div>
                         <div class="legend-right-icon" style="right: 5px;">-</div>
+                        <div class="legend-right-icon">3H</div>
                     </div>
                 </div>
 
@@ -791,11 +820,11 @@
         "Wstaw tu swój opis!",
         "No to akurat już było. MISJA W TOKIO UDANA?",
         "Niby taki prosty rulon, a ile pracy? Co najmniej zawsze smaczny wychodzi",
-        "CZAS WYBUDOWAĆ BAZĘ I SPĘDZIĆ TAM WIECZÓR",
+        "Projektor, ja, ty i może BAZA?, no zobaczymy",
         "Oj trudne sie wylosowało, co najmniej dla mnie",
         "Chlapu chlapu kompu kompu(nie wiedziałem co tu dać)",
         "Hopsa, hopsa, o kurwa złamałem nogę.",
-        "MMM coś dużego, ciekawie pachnie, gumowa konstystencja aaa to tylko ...",
+        "Zgaduj zgadula. Kto będzie mieć wiecej punktów wygrywa",
         "Dwa kije, dwie piłki jedno pole co się może źle stać, prawda?",
         "No może to nie kosmos ale podobno ma być tak samo fajnie (chyba że nazwa kłamie, choć wiemy że nie)",
         "No niech to znowu chujowe miejsca, ale co najmniej tanie były",
