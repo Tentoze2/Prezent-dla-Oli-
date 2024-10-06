@@ -855,7 +855,7 @@
     function activateDate(index) {
         localStorage.setItem(`activated-${index}`, true);
         modalActivated.classList.add('show');
-        activatedText.textContent = `Zadanie na dziś: ${randki[index - 1]}`;
+        activatedText.textContent = `Wybrana randka: ${randki[index - 1]}`;
         document.querySelector(`.box[data-id="${index}"]`).classList.add('active');
         updateRewardCounter();
         updateRewards()
