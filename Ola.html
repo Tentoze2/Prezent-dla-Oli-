@@ -53,6 +53,7 @@
         /* Dla urządzeń mobilnych */
         @media (max-width: 600px) {
             .page-layout {
+
                 flex-direction: column;
                 align-items: center;
             }
@@ -61,7 +62,7 @@
                 flex-direction: row;
                 justify-content: center;
                 gap: 10px;
-                margin-top: 20px;
+                margin-bottom: 10px;
             }
 
             .reward-box {
@@ -327,7 +328,7 @@
             button, a {
                 outline: none; /* Usuwa obramowanie focus (skupienia) na przyciskach i linkach */
             }
-            
+
             body {
                 background: url('https://i.ibb.co/WnnpNrx/peakpx.jpg') no-repeat center center fixed;
                 background-size: cover; /* Dopasowuje obrazek do rozmiaru ekranu */
@@ -335,6 +336,7 @@
 
             .container {
                 margin-top: 10px;
+                margin-bottom: 10px;
                 display: grid;
                 align: center;
                 grid-template-columns: repeat(2, 100px);
@@ -398,8 +400,6 @@
                 top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
                 left: 5px; /* Odstęp od lewej krawędzi */
             }
-
-
 
 
         }
@@ -752,7 +752,7 @@
             <div class="reward-box" data-reward-id="5">Mega big WIN</div>
         </div>
     </div>
-    <div style="text-align: center; margin-top: 20px;">
+    <div style="text-align: center; margin-top: 10px;">
         <p id="reward-counter"></p>
     </div>
 </div>
