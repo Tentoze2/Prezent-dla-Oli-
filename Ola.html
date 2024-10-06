@@ -319,9 +319,15 @@
         /* Styl dla urządzeń mobilnych */
         @media (max-width: 600px) {
 
+
             * {
                 -webkit-tap-highlight-color: transparent; /* Wyłącza poświatę na urządzeniach z dotykowymi ekranami */
             }
+
+            button, a {
+                outline: none; /* Usuwa obramowanie focus (skupienia) na przyciskach i linkach */
+            }
+            
             body {
                 background: url('https://i.ibb.co/WnnpNrx/peakpx.jpg') no-repeat center center fixed;
                 background-size: cover; /* Dopasowuje obrazek do rozmiaru ekranu */
