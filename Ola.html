@@ -6,400 +6,403 @@
     <title>Kalendarz Randkowy</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-            padding: 0px;
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #f0f0f0;
+          padding: 0px;
         }
 
         /* Układ strony */
         .page-layout {
-            display: flex;
-            justify-content: space-between;
+          display: flex;
+          justify-content: space-between;
         }
 
         /* Boxy z nagrodami po lewej i prawej stronie */
         .rewards-left, .rewards-right {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            margin: auto;
-            gap: 40px;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          margin: auto;
+          gap: 40px;
         }
 
         .reward-box {
-            width: 150px;
-            height: 150px;
-            background-color: #ffd700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 16px;
-            font-weight: bold;
-            color: #333333;
-            border-radius: 8px;
-            cursor: pointer;
-            opacity: 0.5; /* Nagroda nieaktywna na początku */
-            transition: opacity 0.3s;
+          width: 150px;
+          height: 150px;
+          background-color: #ffd700;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 16px;
+          font-weight: bold;
+          color: #333333;
+          border-radius: 8px;
+          cursor: pointer;
+          opacity: 0.5; /* Nagroda nieaktywna na początku */
+          transition: opacity 0.3s;
         }
 
         /* Aktywne nagrody */
         .reward-box.active {
-            opacity: 1;
+          opacity: 1;
         }
 
         /* Dla urządzeń mobilnych */
         @media (max-width: 600px) {
-            .page-layout {
+          .page-layout {
 
-                flex-direction: column;
-                align-items: center;
-            }
+            flex-direction: column;
+            align-items: center;
+          }
 
-            .rewards-left, .rewards-right {
-                flex-direction: row;
-                justify-content: center;
-                gap: 10px;
-                margin-bottom: 10px;
-            }
+          .rewards-left, .rewards-right {
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
 
-            .reward-box {
-                width: 100%;
-                height: 100px;
-            }
+          .reward-box {
+            width: 100%;
+            height: 100px;
+          }
         }
 
 
         .container {
-            display: grid;
-            justify-content: center;
-            grid-template-columns: repeat(6, 170px);
-            grid-gap: 10px;
+          display: grid;
+          justify-content: center;
+          grid-template-columns: repeat(6, 170px);
+          grid-gap: 10px;
         }
 
         .legendBox {
-            display: grid;
-            background-size: auto;
-            justify-content: flex-start;
-            align-items: start;
+          display: grid;
+          background-size: auto;
+          justify-content: flex-start;
+          align-items: start;
         }
 
         .box {
-            position: relative;
-            width: 170px;
-            height: 170px;
-            background-color: #ffcccb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333333;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+          position: relative;
+          width: 170px;
+          height: 170px;
+          background-color: #ffcccb;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: #333333;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s;
         }
 
         .box.active {
-            background-color: rgba(144, 238, 144, 0.9);
+          background-color: rgba(144, 238, 144, 0.9);
+        }
+        .box.inprogress {
+          background-color: rgba(236, 198, 132, 0.9);
         }
 
-        .modal, .modal-activated {
-            z-index: 3;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            visibility: hidden;
+        .modal, .modal-activated,.modal-in-progress {
+          z-index: 3;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          visibility: hidden;
         }
 
-        .modal-content, .modal-activated-content {
-            z-index: 3;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
+        .modal-content, .modal-activated-content, .modal-in-progress-content {
+          z-index: 3;
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 80%;
+          max-width: 400px;
         }
 
         .modal-reward {
-            z-index: 3;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            visibility: hidden;
+          z-index: 3;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          visibility: hidden;
         }
 
         .modal-reward-content {
 
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 80%;
+          max-width: 400px;
         }
 
         .modal-reward.show {
-            visibility: visible;
+          visibility: visible;
         }
 
         .reward-claim-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #008000;
-            color: white;
-            border: none;
-            cursor: pointer;
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #008000;
+          color: white;
+          border: none;
+          cursor: pointer;
         }
 
-        .modal.show, .modal-activated.show {
-            visibility: visible;
+        .modal.show, .modal-activated.show, .modal-in-progress.show {
+          visibility: visible;
         }
 
         .close-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff4500;
-            color: white;
-            border: none;
-            cursor: pointer;
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #ff4500;
+          color: white;
+          border: none;
+          cursor: pointer;
         }
 
         .activate-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #008000;
-            color: white;
-            border: none;
-            cursor: pointer;
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #008000;
+          color: white;
+          border: none;
+          cursor: pointer;
         }
 
 
         .legend-icon {
-            top: 5px; /* Odstęp od góry boxa */
-            left: 5px; /* Odstęp od lewej krawędzi */
-            width: 30px; /* Szerokość ikon */
-            height: 30px; /* Wysokość ikon */
-            position: absolute; /* Umożliwia nałożenie na box */
-            z-index: 1; /* Wyświetlanie na wierzchu */
+          top: 5px; /* Odstęp od góry boxa */
+          left: 5px; /* Odstęp od lewej krawędzi */
+          width: 30px; /* Szerokość ikon */
+          height: 30px; /* Wysokość ikon */
+          position: absolute; /* Umożliwia nałożenie na box */
+          z-index: 1; /* Wyświetlanie na wierzchu */
         }
 
         .legend-icon:nth-child(2) {
-            top: 35px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
+          top: 35px; /* Ustawienie drugiej ikony poniżej pierwszej */
+          left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(3) {
-            top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
+          top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
+          left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(4) {
-            top: 95px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
+          top: 95px; /* Ustawienie drugiej ikony poniżej pierwszej */
+          left: 5px; /* Odstęp od lewej krawędzi */
         }
 
         .legend-icon:nth-child(5) {
-            top: 125px; /* Ustawienie drugiej ikony poniżej pierwszej */
-            left: 5px; /* Odstęp od lewej krawędzi */
+          top: 125px; /* Ustawienie drugiej ikony poniżej pierwszej */
+          left: 5px; /* Odstęp od lewej krawędzi */
         }
 
 
         .legend-right-icon {
-            top: 5px;
-            right: 5px;
-            width: 30px; /* Szerokość ikon */
-            height: 30px; /* Wysokość ikon */
-            position: absolute; /* Umożliwia nałożenie na box */
-            z-index: 1; /* Wyświetlanie na wierzchu */
+          top: 5px;
+          right: 5px;
+          width: 30px; /* Szerokość ikon */
+          height: 30px; /* Wysokość ikon */
+          position: absolute; /* Umożliwia nałożenie na box */
+          z-index: 1; /* Wyświetlanie na wierzchu */
         }
         .long-text {
-            right: 15px;
+          right: 15px;
         }
 
         .legend-right-icon:nth-child(2) {
-            top: 35px; /* Odstęp od góry boxa */
-            right: 10px; /* Wyświetlanie na wierzchu */
+          top: 35px; /* Odstęp od góry boxa */
+          right: 10px; /* Wyświetlanie na wierzchu */
         }
 
         .legend-right-icon:nth-child(3) {
-            top: 65px; /* Odstęp od góry boxa */
-            right: 5px; /* Wyświetlanie na wierzchu */
+          top: 65px; /* Odstęp od góry boxa */
+          right: 5px; /* Wyświetlanie na wierzchu */
         }
 
         .house {
-            background-image: url('https://i.ibb.co/r0RxYrz/Pngtree-vector-house-icon-4013710.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/r0RxYrz/Pngtree-vector-house-icon-4013710.png');
+          background-size: cover;
         }
 
         .snowflake {
-            background-image: url('https://i.ibb.co/7QGwDGy/Pngtree-winter-next-month-simple-six-sided-5525426.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/7QGwDGy/Pngtree-winter-next-month-simple-six-sided-5525426.png');
+          background-size: cover;
         }
 
         .sun {
-            background-image: url('https://i.ibb.co/hL5QBbK/sun-icon-175968.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/hL5QBbK/sun-icon-175968.png');
+          background-size: cover;
         }
 
         .sport {
-            background-image: url('https://i.ibb.co/CbTHcRN/sports-running-icon-21.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/CbTHcRN/sports-running-icon-21.png');
+          background-size: cover;
         }
         .camera {
-            background-image: url('https://i.ibb.co/xXpW2qM/camera-icon-isolated-on-transparent-background-png.webp');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/xXpW2qM/camera-icon-isolated-on-transparent-background-png.webp');
+          background-size: cover;
         }
         .tree {
-            background-image: url('https://i.ibb.co/LPgZ30J/490091.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/LPgZ30J/490091.png');
+          background-size: cover;
         }
         .food {
-            background-image: url('https://i.ibb.co/MhrdVW6/5235253.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/MhrdVW6/5235253.png');
+          background-size: cover;
         }
         .heart {
-            background-image: url('https://i.ibb.co/fYZN7L4/valentine-heart-icon-6.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/fYZN7L4/valentine-heart-icon-6.png');
+          background-size: cover;
         }
         .star {
-            background-image: url('https://i.ibb.co/6FmTSVN/3805311.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/6FmTSVN/3805311.png');
+          background-size: cover;
         }
         .book {
-            background-image: url('https://i.ibb.co/FKsdhNh/open-book-icon-7991a2.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/FKsdhNh/open-book-icon-7991a2.png');
+          background-size: cover;
         }
         .game {
-            background-image: url('https://i.ibb.co/SXD2Md5/among-us-play-512x512.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/SXD2Md5/among-us-play-512x512.png');
+          background-size: cover;
         }
         .theatre {
-            background-image: url('https://i.ibb.co/5Fj50sH/comedy-drama-masks-theater-theatre-icon-5.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/5Fj50sH/comedy-drama-masks-theater-theatre-icon-5.png');
+          background-size: cover;
         }
         .film {
-            background-image: url('https://i.ibb.co/By6p59z/movie-icon-1.png');
-            background-size: cover;
-            width: 35px;
-            height: 35px;
-            left: 2px;
-            top: 2px;
+          background-image: url('https://i.ibb.co/By6p59z/movie-icon-1.png');
+          background-size: cover;
+          width: 35px;
+          height: 35px;
+          left: 2px;
+          top: 2px;
         }
         .water {
-            background-image: url('https://i.ibb.co/LzJfX7J/1235535-200.png');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/LzJfX7J/1235535-200.png');
+          background-size: cover;
         }
         .leaf {
-            background-image: url('https://i.ibb.co/RYfrC4D/leaves-autumn-icon-png.webp');
-            background-size: cover;
+          background-image: url('https://i.ibb.co/RYfrC4D/leaves-autumn-icon-png.webp');
+          background-size: cover;
         }
 
         .box {
-            background-color: rgba(255, 255, 255, 0.8); /* Lekko przezroczyste tło */
-            border: 1px solid black;
-            position: relative; /* Umożliwia pozycjonowanie ikon w obrębie boxa */
-            /* inne style boxa */
+          background-color: rgba(255, 255, 255, 0.8); /* Lekko przezroczyste tło */
+          border: 1px solid black;
+          position: relative; /* Umożliwia pozycjonowanie ikon w obrębie boxa */
+          /* inne style boxa */
         }
 
         /* Styl dla urządzeń mobilnych */
         @media (max-width: 600px) {
 
 
-            * {
-                -webkit-tap-highlight-color: transparent; /* Wyłącza poświatę na urządzeniach z dotykowymi ekranami */
-            }
+          * {
+            -webkit-tap-highlight-color: transparent; /* Wyłącza poświatę na urządzeniach z dotykowymi ekranami */
+          }
 
-            button, a {
-                outline: none; /* Usuwa obramowanie focus (skupienia) na przyciskach i linkach */
-            }
+          button, a {
+            outline: none; /* Usuwa obramowanie focus (skupienia) na przyciskach i linkach */
+          }
 
-            body {
-                background: url('https://i.ibb.co/WnnpNrx/peakpx.jpg') no-repeat center center fixed;
-                background-size: cover; /* Dopasowuje obrazek do rozmiaru ekranu */
-            }
+          body {
+            background: url('https://i.ibb.co/WnnpNrx/peakpx.jpg') no-repeat center center fixed;
+            background-size: cover; /* Dopasowuje obrazek do rozmiaru ekranu */
+          }
 
-            .container {
-                margin-top: 10px;
-                margin-bottom: 10px;
-                display: grid;
-                align: center;
-                grid-template-columns: repeat(2, 100px);
-                grid-gap: 20px;
-            }
+          .container {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: grid;
+            align: center;
+            grid-template-columns: repeat(2, 100px);
+            grid-gap: 20px;
+          }
 
-            .box {
-                width: 100px;
-                height: 100px;
-            }
-            .long-text {
-                right: 10px !important;
-            }
-            .even-longer-text {
-                right: 18px !important;
-            }
+          .box {
+            width: 100px;
+            height: 100px;
+          }
+          .long-text {
+            right: 10px !important;
+          }
+          .even-longer-text {
+            right: 18px !important;
+          }
 
-            .legend-right-icon {
-                top: 5px;
-                right: 6px;
-                width: 20px; /* Szerokość ikon */
-                height: 20px; /* Wysokość ikon */
-                position: absolute; /* Umożliwia nałożenie na box */
-                z-index: 1; /* Wyświetlanie na wierzchu */
-            }
+          .legend-right-icon {
+            top: 5px;
+            right: 6px;
+            width: 20px; /* Szerokość ikon */
+            height: 20px; /* Wysokość ikon */
+            position: absolute; /* Umożliwia nałożenie na box */
+            z-index: 1; /* Wyświetlanie na wierzchu */
+          }
 
-            .legend-right-icon:nth-child(2) {
-                top: 25px; /* Odstęp od góry boxa */
-                right: 6px; /* Wyświetlanie na wierzchu */
-            }
-            .legend-right-icon:nth-child(3) {
-                top: 45px; /* Odstęp od góry boxa */
-                right: 6px; /* Wyświetlanie na wierzchu */
-            }
+          .legend-right-icon:nth-child(2) {
+            top: 25px; /* Odstęp od góry boxa */
+            right: 6px; /* Wyświetlanie na wierzchu */
+          }
+          .legend-right-icon:nth-child(3) {
+            top: 45px; /* Odstęp od góry boxa */
+            right: 6px; /* Wyświetlanie na wierzchu */
+          }
 
-            .legend-icon {
-                top: 5px; /* Odstęp od góry boxa */
-                left: 5px; /* Odstęp od lewej krawędzi */
-                width: 20px; /* Szerokość ikon */
-                height: 20px; /* Wysokość ikon */
-                position: absolute; /* Umożliwia nałożenie na box */
-                z-index: 1; /* Wyświetlanie na wierzchu */
-            }
+          .legend-icon {
+            top: 5px; /* Odstęp od góry boxa */
+            left: 5px; /* Odstęp od lewej krawędzi */
+            width: 20px; /* Szerokość ikon */
+            height: 20px; /* Wysokość ikon */
+            position: absolute; /* Umożliwia nałożenie na box */
+            z-index: 1; /* Wyświetlanie na wierzchu */
+          }
 
-            .legend-icon:nth-child(2) {
-                top: 25px; /* Ustawienie drugiej ikony poniżej pierwszej */
-                left: 5px; /* Odstęp od lewej krawędzi */
-            }
+          .legend-icon:nth-child(2) {
+            top: 25px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
+          }
 
-            .legend-icon:nth-child(3) {
-                top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
-                left: 5px; /* Odstęp od lewej krawędzi */
-            }
+          .legend-icon:nth-child(3) {
+            top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
+          }
 
-            .legend-icon:nth-child(4) {
-                top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
-                left: 5px; /* Odstęp od lewej krawędzi */
-            }
+          .legend-icon:nth-child(4) {
+            top: 45px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
+          }
 
-            .legend-icon:nth-child(5) {
-                top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
-                left: 5px; /* Odstęp od lewej krawędzi */
-            }
+          .legend-icon:nth-child(5) {
+            top: 65px; /* Ustawienie drugiej ikony poniżej pierwszej */
+            left: 5px; /* Odstęp od lewej krawędzi */
+          }
 
 
         }
@@ -763,6 +766,13 @@
         <button class="close-btn" id="close-btn">Zamknij</button>
     </div>
 </div>
+<div class="modal-in-progress" id="modal-in-progress">
+    <div class="modal-in-progress-content">
+        <p id="modal-in-progress-text">Opis randki...</p>
+        <button class="activate-btn" id="complete-btn">Randka zakończona</button>
+        <button class="close-btn" id="close-in-progress-btn">Zamknij</button>
+    </div>
+</div>
 
 <div class="modal-activated" id="modal-activated">
     <div class="modal-activated-content">
@@ -784,9 +794,13 @@
     const modal = document.getElementById('modal');
     const modalText = document.getElementById('modal-text');
     const modalActivated = document.getElementById('modal-activated');
+    const modalInProgress = document.getElementById('modal-in-progress');
     const activatedText = document.getElementById('activated-text');
+    const inProgressText = document.getElementById('modal-in-progress-text');
     const activateBtn = document.getElementById('activate-btn');
+    const completeBtn = document.getElementById('complete-btn');
     const closeBtn = document.getElementById('close-btn');
+    const closeInProgressBtn = document.getElementById('close-in-progress-btn');
     const closeActivatedBtn = document.getElementById('close-activated-btn');
 
     // Lista opisów randek
@@ -846,25 +860,47 @@
 
     // Funkcja pokazująca modal z opisem randki
     function showModal(index) {
-        modalText.textContent = opisRandek[index - 1]; // Używamy opisu z nowej tablicy
-        modal.classList.add('show');
-        activateBtn.onclick = () => activateDate(index);
+        modalText.textContent = opisRandek[index - 1];
+        if (localStorage.getItem(`activated-${index}`) === null ) {
+            modal.classList.add('show');
+            activateBtn.onclick = () => activateDate(index);
+        } else if (localStorage.getItem(`activated-${index}`) === 'false' ) {
+            modalInProgress.classList.add('show');
+            inProgressText.textContent = `Wybrana randka: ${randki[index - 1]}`;
+            completeBtn.onclick = () => completeDate(index);
+        } else if (localStorage.getItem(`activated-${index}`) === 'true' ) {
+            modalActivated.classList.add('show');
+            activatedText.textContent = `Zakończona: ${randki[index - 1]}`;
+            activateBtn.onclick = () => activateDate(index);
+        }
     }
 
     // Funkcja aktywująca randkę i pokazująca plan
     function activateDate(index) {
-        localStorage.setItem(`activated-${index}`, true);
+        localStorage.setItem(`activated-${index}`, false);
         modalActivated.classList.add('show');
         activatedText.textContent = `Wybrana randka: ${randki[index - 1]}`;
-        document.querySelector(`.box[data-id="${index}"]`).classList.add('active');
+        document.querySelector(`.box[data-id="${index}"]`).classList.add('inprogress');
         updateRewardCounter();
         updateRewards()
         modal.classList.remove('show');
+    }
+    function completeDate(index) {
+        localStorage.setItem(`activated-${index}`, true);
+        activatedText.textContent = `Wybrana randka: ${randki[index - 1]}`;
+        document.querySelector(`.box[data-id="${index}"]`).classList.remove('inprogress');
+        document.querySelector(`.box[data-id="${index}"]`).classList.add('active');
+        updateRewardCounter();
+        updateRewards()
+        modalInProgress.classList.remove('show');
     }
 
     // Funkcja zamykająca modale
     function closeModal() {
         modal.classList.remove('show');
+    }
+    function closeInProgressModal() {
+        modalInProgress.classList.remove('show');
     }
 
     function closeActivatedModal() {
@@ -872,8 +908,8 @@
     }
 
     const nagrody = [
-        {id: 1, requiredDates: 1, description: "Bon na wspólną kolację"},
-        {id: 2, requiredDates: 3, description: "Bon na wspólną kolację2"},
+        {id: 1, requiredDates: 1, description: "Całus od Kubusia"},
+        {id: 2, requiredDates: 3, description: "Bon na wspólną kolację"},
         {id: 3, requiredDates: 7, description: "Bon na wspólną kolację3"},
         {id: 4, requiredDates: 10, description: "Bon na wspólną kolację4"},
         {id: 5, requiredDates: 15, description: "Bon na wspólną kolację5"}
@@ -885,7 +921,7 @@
 
         // Sprawdzamy ile randek zostało aktywowanych
         for (let i = 1; i <= 24; i++) {
-            if (localStorage.getItem(`activated-${i}`)) {
+            if (localStorage.getItem(`activated-${i}`) === 'true') {
                 activatedDates++;
             }
         }
@@ -913,7 +949,11 @@
 
         // Odczytaj, które randki zostały aktywowane
         const id = box.getAttribute('data-id');
-        if (localStorage.getItem(`activated-${id}`)) {
+
+        if (localStorage.getItem(`activated-${id}`) === 'false') {
+            box.classList.add('inprogress');
+        }
+        if (localStorage.getItem(`activated-${id}`) === 'true') {
             box.classList.add('active');
         }
     });
@@ -971,7 +1011,7 @@
 
         // Sprawdzamy, ile randek zostało aktywowanych
         for (let i = 1; i <= 24; i++) {
-            if (localStorage.getItem(`activated-${i}`)) {
+            if (localStorage.getItem(`activated-${i}`) === 'true') {
                 activatedDates++;
             }
         }
@@ -993,6 +1033,7 @@
     updateRewardCounter();
 
     closeBtn.addEventListener('click', closeModal);
+    closeInProgressBtn.addEventListener('click', closeInProgressModal);
     closeActivatedBtn.addEventListener('click', closeActivatedModal);
 </script>
 
