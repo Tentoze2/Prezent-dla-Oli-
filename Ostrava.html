@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyjazd do Ostrawy - Plan Podróży</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            background: #0a0a0a;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .day-content {
+            display: none;
+        }
+
+        .day-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-btn {
+            transition: all 0.2s ease;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .activity-card {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .activity-card:hover {
+            border-left-color: #FF6B6B;
+            background: #fff5f5 !important;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            height: calc(100% - 7rem);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            filter: brightness(0.95);
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.02);
+            filter: brightness(1);
+        }
+
+        .mobile-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-layout {
+                flex-direction: column;
+            }
+
+            .map-section, .content-section {
+                width: 100% !important;
+                height: 50vh !important;
+            }
+
+            .image-gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+                height: calc(50vh - 14rem);
+            }
+
+            .mobile-toggle {
+                display: block;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999;
+                background: #FF6B6B;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                box-shadow: 0 4px 20px rgba(255, 107, 107, 0.5);
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-toggle:active {
+                transform: scale(0.95);
+            }
+
+            .map-section.mobile-hidden {
+                display: none;
+            }
+
+            .content-section.mobile-full {
+                height: 100vh !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="mobileToggle">🗺️</button>
+
+    <!-- Main Container -->
+    <div class="flex h-screen desktop-layout">
+
+        <!-- Left Side - Map -->
+        <div class="w-1/2 relative map-section">
+            <div id="map"></div>
+            <div class="absolute top-4 left-4 bg-white px-4 py-3 rounded-xl shadow-2xl z-[1000] border-2 border-gray-100">
+                <h2 class="text-base font-extrabold text-gray-900 tracking-tight">🇨🇿 OSTRAWA 2024</h2>
+                <p class="text-xs text-gray-500 font-semibold mt-1">DAY <span id="mapDayIndicator">1</span>/5</p>
+            </div>
+        </div>
+
+        <!-- Right Side - Content -->
+        <div class="w-1/2 bg-white flex flex-col content-section">
+
+            <!-- Header -->
+            <div class="gradient-bg text-gray-900 px-6 py-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <h1 class="text-2xl font-extrabold tracking-tight">WYCIECZKA OSTRAWA</h1>
+                    <span class="text-2xl">by Kuba</span>
+                </div>
+                <p class="text-base font-bold opacity-90" id="dayTitle">Środa - Dojazd</p>
+            </div>
+
+            <!-- Content Area with Images -->
+            <div class="flex-1 overflow-y-auto px-6 py-5 bg-gray-50">
+
+                <!-- Day 1 Content -->
+                <div class="day-content active" data-day="1">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 uppercase tracking-wide">Co robimy?</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🚗</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">16:15 - 19:30</p>
+                                        <p class="text-gray-600 text-sm">Jazda autostradą A1, ~300 km w 3h</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏨</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Wieczór</p>
+                                        <p class="text-gray-600 text-sm">Check-in w hotelu i rozpakowywanie się</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🍺</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">~20:00</p>
+                                        <p class="text-gray-600 text-sm">Pierwsze czeskie piwo na rynku + kolacja</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-gallery">
+                        <img src="https://imageoptimizecdn-blog.online/unsafe/rs:fit:640/q:65/plain/https%3A%2F%2Ffrce8xp4ye4n.compat.objectstorage.eu-frankfurt-1.oraclecloud.com%2Fblog-assets%2Fthumbnail%2Fcb02587bc28f4585438fab86127d4655%2Fjak-przebiega-autostrada-a1-kluczowe-informacje-i-trasa-w-polsce.webp?w=600" alt="Droga" class="gallery-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Masarykovo_namesti.jpg?w=600&h=400" alt="Miasto" class="gallery-img">
+                        <img src="https://zdrowapianka.pl/wp-content/uploads/2024/03/0803-piwa-czeskie.jpg?w=600" alt="Piwo" class="gallery-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/Masarykovo_n%C3%A1m%C4%9Bst%C3%AD_v_Ostrav%C4%9B.jpg?w=600" alt="Rynek" class="gallery-img">
+                    </div>
+                </div>
+
+                <!-- Day 2 Content -->
+                <div class="day-content" data-day="2">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 uppercase tracking-wide">Co robimy?</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏭</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">10:00 - 13:00</p>
+                                        <p class="text-gray-600 text-sm">Dolní Vítkovice - wjeżdżamy na Bolt Tower i muzeum techniki</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">⛏️</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">14:00 - 17:00</p>
+                                        <p class="text-gray-600 text-sm">Landek Park</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🌅</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">~19:30</p>
+                                        <p class="text-gray-600 text-sm">Hałda Ema na zachód słońca z widokiem na miasto</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-gallery">
+                        <img src="https://www.visitostrava.eu/images_firmy/476_14-baner-visit-1-m-jpg.jpeg?w=600" alt="Industrial" class="gallery-img">
+                        <img src="https://slevomat.sgcdn.cz/images/t/2000/15/51/15512304-e363f6.webp?w=600" alt="Fabryka" class="gallery-img">
+                        <img src="https://severnimorava.travel/wp-content/uploads/sites/4/2022/12/PhotoPick-108140-1280_mesto-ostrava.jpg?w=600" alt="Kopalnia" class="gallery-img">
+                        <img src="https://severnimorava.travel/wp-content/uploads/sites/4/2022/12/halda-ema-1.jpg?w=600" alt="Sunset" class="gallery-img">
+                    </div>
+                </div>
+
+                <!-- Day 3 Content -->
+                <div class="day-content" data-day="3">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 uppercase tracking-wide">Co robimy?</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏛️</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">10:00 - 12:00</p>
+                                        <p class="text-gray-600 text-sm">Plac Masaryka + wjeżdżamy na wieżę ratusza po widoki</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏊</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">13:00 - 18:00</p>
+                                        <p class="text-gray-600 text-sm">Kąpielisko Poruba - plażowanie, langosze i zimne piwo</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🍻</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">20:00+</p>
+                                        <p class="text-gray-600 text-sm">Stodolnía - najbardziej znana ulica w CZ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-gallery">
+                        <img src="https://severnimorava.travel/wp-content/uploads/sites/4/2022/12/mg_2638-scaled.jpg?w=600" alt="Centrum" class="gallery-img">
+                        <img src="https://severnimorava.travel/wp-content/uploads/sites/4/2022/12/ostrava-radnice-a-prokosove-nam-s-lidmi-1-2.jpg?w=600" alt="Wieża" class="gallery-img">
+                        <img src="https://www.tourismato.cz/foto/letni-koupaliste-ostrava-poruba-vresina-9d2d-365292.jpg?w=600" alt="Basen" class="gallery-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stodoln%C3%AD_ulice.jpg?w=600" alt="Pub" class="gallery-img">
+                    </div>
+                </div>
+
+                <!-- Day 4 Content -->
+                <div class="day-content" data-day="4">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 uppercase tracking-wide">Co robimy?</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🚗</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">08:30</p>
+                                        <p class="text-gray-600 text-sm">Jazda do Ostravice (40 min) - parkujemy i startujemy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🥾</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Cały dzień - 17 km</p>
+                                        <p class="text-gray-600 text-sm">Wejście na Lysą horę (1323m) - czerwony szlak, 5-6h</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">⛰️</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Na szczycie</p>
+                                        <p class="text-gray-600 text-sm">Oby było coś widać</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">😴</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Wieczór</p>
+                                        <p class="text-gray-600 text-sm">Powrót do Ostrawy - odpoczynek po trekkingu</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-gallery">
+                        <img src="https://hasajacezajace.com/wp-content/uploads/2024/05/lysa-hora-czechy-2-1.jpg?w=600" alt="Góry" class="gallery-img">
+                        <img src="https://cms.visitczechia.com/cms/getmedia/264761c0-f63e-4acd-ab1b-e50a68476732/Beskydy-Lysa-hora-autor-Martin-Friedel.jpg?width=1920&height=1439&ext=.jpg?w=600" alt="Trekking" class="gallery-img">
+                        <img src="https://severnimorava.travel/wp-content/uploads/sites/4/2022/12/01-15.jpg?w=600" alt="Schronisko" class="gallery-img">
+                        <img src="https://zwiedzajacswiat.com/wp-content/uploads/2017/06/sly3682b.jpg?w=600" alt="Summit" class="gallery-img">
+                    </div>
+                </div>
+
+                <!-- Day 5 Content -->
+                <div class="day-content" data-day="5">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 uppercase tracking-wide">Co robimy?</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏰</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">09:30</p>
+                                        <p class="text-gray-600 text-sm">Jazda do Štramberka (40 min)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🏘️</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">10:00 - 12:00</p>
+                                        <p class="text-gray-600 text-sm">Spacer między drewnianymi chatami + wieża Trúba</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🥨</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Pamiątki</p>
+                                        <p class="text-gray-600 text-sm">Coś tam fajnego kupujemy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm activity-card">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl">🚗</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">16:00</p>
+                                        <p class="text-gray-600 text-sm">Wracamy do Łodzi - koniec wyprawy (3h drogi)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-gallery">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/%C5%A0tramberk_%28CZE%29_-_general_view_of_the_town.jpg?w=600" alt="Miasteczko" class="gallery-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Stramberk_castle_-_View_from_Kotouc.jpg?w=600" alt="Zamek" class="gallery-img">
+                        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/65/7c/c5/no-nekup-to-pekarna-u.jpg?w=600" alt="Pierniki" class="gallery-img">
+                        <img src="https://martajelen.pl/wp-content/uploads/2022/05/Stramberk27-1140x762.jpg?w=600" alt="Jedzenie" class="gallery-img">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation -->
+            <div class="bg-white border-t-2 border-gray-100 px-6 py-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <button id="prevBtn" class="nav-btn bg-gradient-to-r from-red-500 to-pink-500 text-white px-5 py-2.5 rounded-lg shadow-md disabled:from-gray-300 disabled:to-gray-400">
+                        ← WSTECZ
+                    </button>
+
+                    <div class="flex gap-2.5">
+                        <button class="day-indicator w-3 h-3 rounded-full bg-red-500 transition-all hover:scale-125" data-day="1"></button>
+                        <button class="day-indicator w-3 h-3 rounded-full bg-gray-300 transition-all hover:scale-125" data-day="2"></button>
+                        <button class="day-indicator w-3 h-3 rounded-full bg-gray-300 transition-all hover:scale-125" data-day="3"></button>
+                        <button class="day-indicator w-3 h-3 rounded-full bg-gray-300 transition-all hover:scale-125" data-day="4"></button>
+                        <button class="day-indicator w-3 h-3 rounded-full bg-gray-300 transition-all hover:scale-125" data-day="5"></button>
+                    </div>
+
+                    <button id="nextBtn" class="nav-btn bg-gradient-to-r from-red-500 to-pink-500 text-white px-5 py-2.5 rounded-lg shadow-md">
+                        DALEJ →
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let map = null;
+        let currentDay = 1;
+        const totalDays = 5;
+
+        // Day titles
+        const dayTitles = {
+            1: "Środa - Dojazd",
+            2: "Czwartek - Industrialny vibe",
+            3: "Piątek - Centrum",
+            4: "Sobota - Trekking górski",
+            5: "Niedziela - Miasteczko"
+        };
+
+        // Locations data per day
+        const dayLocations = {
+            1: [
+                { lat: 51.780646, lng: 19.475010, name: "Łódź", desc: "🏠 Start podróży" },
+                { lat: 49.8209, lng: 18.2625, name: "Ostrawa", desc: "🏨 Cel - baza wypadowa" }
+            ],
+            2: [
+                { lat: 49.8184841, lng: 18.2758437, name: "Dolní Vítkovice", desc: "🏭 Bolt Tower" },
+                { lat: 49.8665652, lng: 18.2635193, name: "Landek Park", desc: "⛏️ Kopalnia" },
+                { lat:  49.8397948, lng: 18.3148720, name: "Hałda Ema", desc: "🌅 Zachód słońca" }
+            ],
+            3: [
+                { lat: 49.835690, lng: 18.292698, name: "Plac Masaryka", desc: "🏛️ Rynek" },
+                { lat: 49.826515, lng: 18.142290, name: "Kąpielisko Poruba", desc: "🏊 Czeskie morze" },
+                { lat: 49.836439, lng: 18.285930, name: "Ulica Stodolní", desc: "🍻 Życie nocne" }
+            ],
+            4: [
+                { lat:  49.5459784, lng: 18.4472696, name: "Lysá hora", desc: "⛰️ 1323 m n.p.m." }
+            ],
+            5: [
+                { lat: 49.59029, lng: 18.11500, name: "Štramberk", desc: "🏰 Bajkowe miasteczko" },
+                { lat: 51.780646, lng: 19.475010, name: "Łódź", desc: "🏠 Powrót do domu" }
+            ]
+        };
+
+        // Initialize map
+        function initMap() {
+            // Create map centered on Ostrawa
+            map = L.map('map').setView([49.8209, 18.2625], 8);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            updateMap();
+        }
+
+        let currentMarkers = [];
+        let currentPolyline = null;
+
+        // Update map for current day
+        function updateMap() {
+            // Clear existing markers and polyline
+            currentMarkers.forEach(marker => map.removeLayer(marker));
+            currentMarkers = [];
+            if (currentPolyline) {
+                map.removeLayer(currentPolyline);
+            }
+
+            const locations = dayLocations[currentDay];
+            const markerBounds = [];
+
+            // Add markers for current day
+            locations.forEach((loc, index) => {
+                const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+                marker.bindPopup(`<div style="text-align: center; padding: 5px;"><strong style="font-size: 16px;">${loc.name}</strong><br><span style="color: #666;">${loc.desc}</span></div>`);
+                currentMarkers.push(marker);
+                markerBounds.push([loc.lat, loc.lng]);
+            });
+
+            // Draw route line connecting locations
+            if (locations.length > 1) {
+                const routePoints = locations.map(loc => [loc.lat, loc.lng]);
+                currentPolyline = L.polyline(routePoints, {
+                    color: '#8b5cf6',
+                    weight: 3,
+                    opacity: 0.7,
+                    dashArray: '10, 10',
+                    lineJoin: 'round'
+                }).addTo(map);
+            }
+
+            // Fit map to show all markers
+            if (markerBounds.length > 0) {
+                const bounds = L.latLngBounds(markerBounds);
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        // Update UI for current day
+        function updateDay() {
+            // Update title
+            document.getElementById('dayTitle').textContent = dayTitles[currentDay];
+            document.getElementById('mapDayIndicator').textContent = currentDay;
+
+            // Show/hide day content
+            document.querySelectorAll('.day-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelector(`.day-content[data-day="${currentDay}"]`).classList.add('active');
+
+            // Update day indicators
+            document.querySelectorAll('.day-indicator').forEach(indicator => {
+                const day = parseInt(indicator.getAttribute('data-day'));
+                if (day === currentDay) {
+                    indicator.classList.remove('bg-gray-300');
+                    indicator.classList.add('bg-red-500');
+                } else {
+                    indicator.classList.remove('bg-red-500');
+                    indicator.classList.add('bg-gray-300');
+                }
+            });
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentDay === 1;
+            document.getElementById('nextBtn').disabled = currentDay === totalDays;
+
+            // Update map
+            updateMap();
+        }
+
+        // Navigation handlers
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentDay > 1) {
+                currentDay--;
+                updateDay();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentDay < totalDays) {
+                currentDay++;
+                updateDay();
+            }
+        });
+
+        // Day indicator click handlers
+        document.querySelectorAll('.day-indicator').forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                currentDay = parseInt(indicator.getAttribute('data-day'));
+                updateDay();
+            });
+        });
+
+        // Mobile toggle functionality
+        let showingMap = true;
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mapSection = document.querySelector('.map-section');
+        const contentSection = document.querySelector('.content-section');
+
+        mobileToggle.addEventListener('click', () => {
+            showingMap = !showingMap;
+
+            if (showingMap) {
+                mapSection.classList.remove('mobile-hidden');
+                contentSection.classList.remove('mobile-full');
+                mobileToggle.textContent = '📝';
+            } else {
+                mapSection.classList.add('mobile-hidden');
+                contentSection.classList.add('mobile-full');
+                mobileToggle.textContent = '🗺️';
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initMap();
+            updateDay();
+
+            // Set initial mobile toggle state
+            if (window.innerWidth <= 768) {
+                mobileToggle.textContent = '📝';
+            }
+        });
+    </script>
+
+</body>
+</html>
