@@ -177,12 +177,18 @@
             .content-section.mobile-full {
                 height: 100vh !important;
                 display: flex !important;
-                overflow: hidden !important;
+                flex-direction: column !important;
             }
 
-            .content-section.mobile-full > div:nth-child(2) {
+            .content-section.mobile-full > div:last-child {
+                flex: 1 !important;
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch !important;
+            }
+
+            .content-section.mobile-full .day-content.active {
+                min-height: 100vh !important;
+                padding-bottom: 180px !important;
             }
 
             .mobile-header {
@@ -206,10 +212,6 @@
                 padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0)) 1.5rem !important;
                 background: white !important;
                 box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
-            }
-
-            .content-section.mobile-full .flex-1 {
-                padding-bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important;
             }
         }
     </style>
