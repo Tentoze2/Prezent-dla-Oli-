@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wyjazd do Ostrawy - Plan Podróży</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇨🇿</text></svg>">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -627,15 +628,30 @@
         });
 
         // Initialize on page load - wait for Leaflet to load
+        let initAttempts = 0;
         function initialize() {
+            initAttempts++;
+
             if (typeof L === 'undefined') {
                 // Leaflet not loaded yet, wait a bit
-                setTimeout(initialize, 100);
+                if (initAttempts < 50) { // Max 5 seconds
+                    console.log('Waiting for Leaflet... attempt', initAttempts);
+                    setTimeout(initialize, 100);
+                } else {
+                    console.error('Leaflet failed to load after 5 seconds');
+                    document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f3f4f6;color:#ef4444;font-weight:bold;">Mapa nie mogła się załadować 😔</div>';
+                }
                 return;
             }
 
-            initMap();
-            updateDay();
+            console.log('Leaflet loaded, initializing map...');
+            try {
+                initMap();
+                updateDay();
+                console.log('Map initialized successfully!');
+            } catch (error) {
+                console.error('Error initializing map:', error);
+            }
 
             // Set initial mobile toggle state
             if (window.innerWidth <= 768) {
