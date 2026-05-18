@@ -177,7 +177,12 @@
             .content-section.mobile-full {
                 height: 100vh !important;
                 display: flex !important;
-                overflow: visible !important;
+                overflow: hidden !important;
+            }
+
+            .content-section.mobile-full > div:nth-child(2) {
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
             }
 
             .mobile-header {
